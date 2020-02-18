@@ -46,3 +46,40 @@ def updateEC2_Tags(csv_f):
                     print(mytags)
                     ec2_client2.create_tags(Resources=[row[0]], Tags=mytags)
                     print("EC2 updated")
+def updateS3_Tags(csv_f):
+
+    #s3_client = boto3.client('s3', region_name='us-east-1')
+    s3_client = boto3.resource('s3', region_name='us-east-1')
+    #response = s3_client.list_buckets()
+    csv = open("s3buckets.csv",'r')
+    lines = csv.readlines()
+    for line in lines:
+        print(line)
+        parts = line.split(",")
+        bucket_name = parts[0]
+        print(bucket_name)
+        bucket_tagging = s3_client.BucketTagging(bucket_name)
+        
+        #prod-dot-sdc-cvp-wydot-ingest
+        #dev-dot-sdc-dashboard-data
+        mytags = [{"Key": "Environment", "Value": parts[1]},{"Key": "Name", "Value": parts[2]}]
+        try:
+            bucket_tags = bucket_tagging.tag_set
+            #print(bucket_tags)
+            
+            for tag in mytags:
+                for btag in bucket_tags:
+                    if btag["Key"]== tag["Key"]:
+                        bucket_tags.remove(btag)
+                        break
+                bucket_tags  += [tag]
+                        
+            print(bucket_tags)
+            #s3_client.BucketTagging("dev-dot-sdc-dashboard-data").put(Tagging={"TagSet": bucket_tags})
+            #("S3 updated")
+        
+        except:
+            print("No Tags: ", bucket.name)
+            #s3_client.BucketTagging("dev-dot-sdc-dashboard-data").put(Tagging={"TagSet": mytags})
+        
+    csv.close()
