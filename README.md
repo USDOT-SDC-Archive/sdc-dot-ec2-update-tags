@@ -21,9 +21,12 @@ XIV. CODE.GOV Registration Info
 I. Release Notes
 
 November 28, 2019. SDC sdc-dot-ec2-update-tags Release 1.0
+What's New in Release 2.0
+    Added python function to update S3 bucket tags using csv embedded file.
 What's New in Release 1.0:
 
     Original python script to update ec2 instance tags using the csv embedded file.
+    
 II. Usage Example
 III. Configuration
 IV. Installation
